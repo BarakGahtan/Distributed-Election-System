@@ -1,0 +1,45 @@
+syntax = "proto3";
+package protos;
+
+enum MessageType {
+    REPORT = 0;
+    COMMIT_VOTE = 1;
+    DELETE_ACCOUNT = 2;
+}
+message ElectionPeriod {
+    int32 START_ELECTION = 1;
+    int32 END_ELECTION = 2;
+}
+
+message STATUS {
+    int32 SUCCESS = 1;
+    int32 FAILURE = 2;
+}
+message VoteRequest{
+    int32 FromServer = 1;
+    int32 Nominee = 2;
+    int32 VoterID = 3;
+}
+
+message ReportForState {
+    int32 nominee = 1;
+}
+
+message StateID {
+    int32 nominee = 1;
+}
+
+message Database {
+    string file = 1;
+}
+
+service VotingServer {
+    rpc TransferVoteRequest (VoteRequest) returns (STATUS) {}
+
+    rpc ChangeStatusOfElection (ElectionPeriod) returns (STATUS) {}
+
+    rpc ReportPerState (StateID) returns (ReportForState) {}
+
+    rpc PublishMessage (Database) returns (STATUS) {}
+
+}
